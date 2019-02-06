@@ -11,4 +11,4 @@ else
   repo=`echo ${repo} | sed 's/\.git/\/archive\/master.zip/g'`
   /bin/echo -e "\e[1;35mDownloading branch master for $name\e[0m"
 fi
-curl -L ${repo} | bsdtar -xzf - -C ${name} --strip-components 1
+curl -sL ${repo} | bsdtar -xzf - -C ${name} --strip-components 1

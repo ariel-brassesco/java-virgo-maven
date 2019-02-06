@@ -13,10 +13,7 @@ ENV PATH=$PATH:$MAVEN_HOME/bin \
   MAVEN_HTTP=http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
   VIRGO_HTTP=http://www.eclipse.org/downloads/download.php?file=/virgo/release/VP/$VIRGO_RELEASE.RELEASE/virgo-tomcat-server-$VIRGO_RELEASE.RELEASE.zip&r=1
   
-  
 RUN useradd -ms /bin/bash developer
-
-RUN echo "USE GIT BRANCH ------------  $mainBranch";
 
 # install required packages
 RUN apt-get -qq update &&\
