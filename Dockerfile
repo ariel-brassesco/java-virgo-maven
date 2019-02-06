@@ -40,17 +40,17 @@ RUN mkdir -p /etc/sudoers.d $MAVEN_HOME $SERVER_HOME $HOME/geppetto &&\
     chown root:root /usr/bin/sudo && chmod 4755 /usr/bin/sudo
 
 # install maven
-RUN wget -qO- $MAVEN_HTTP | tar xzf - -C $MAVEN_HOME --strip-components 1 &&\
-  mvn --version
+RUN wget -qO- $MAVEN_HTTP | tar xzf - -C $MAVEN_HOME --strip-components 1 && mvn --version
 
 USER developer
-WORKDIR /home/developer
+WORKDIR $HOME
 
 # install virgo
 RUN curl -L $VIRGO_HTTP | bsdtar -xzf - -C $SERVER_HOME --strip-components 1
 COPY --chown=1000:1000 dmk.sh $SERVER_HOME/bin/
 COPY --chown=1000:1000 java-server.profile $SERVER_HOME/configuration/
 COPY --chown=1000:1000 tomcat-server.xml $SERVER_HOME/configuration/
+COPY --chown=1000:1000 copy.sh $HOME
 RUN chmod u+x $SERVER_HOME/bin/*.sh
 
-CMD ["bin/bash", "-c"]
+CMD [ "/bin/bash" ]
