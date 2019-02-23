@@ -48,6 +48,7 @@ COPY --chown=1000:1000 dmk.sh $SERVER_HOME/bin/
 COPY --chown=1000:1000 java-server.profile $SERVER_HOME/configuration/
 COPY --chown=1000:1000 tomcat-server.xml $SERVER_HOME/configuration/
 COPY --chown=1000:1000 copy.sh $HOME
+COPY --chown=1000:1000 rename.sh $HOME
 RUN chmod u+x $SERVER_HOME/bin/*.sh
 
 CMD [ "/bin/bash" ]
