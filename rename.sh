@@ -20,16 +20,16 @@ default_branch=$4
 #################################################################################################
 
 if [ -z $origin_branch ]; then
-  git ls-remote --heads --tags $clone_url | grep -E 'refs/(heads|tags)/'$origin_branch > /dev/null
+  git ls-remote --heads --tags $clone_url | grep -E 'refs/(heads|tags)/'$target_branch > /dev/null
   if [ $? -eq 0 ]; then
-    branch=$origin_branch
+    branch=$target_branch
   else
     branch=$default_branch
   fi
 else
-  git ls-remote --heads --tags $clone_url | grep -E 'refs/(heads|tags)/'$target_branch > /dev/null
+  git ls-remote --heads --tags $clone_url | grep -E 'refs/(heads|tags)/'$origin_branch > /dev/null
   if [ $? -eq 0 ]; then
-    branch=$target_branch
+    branch=$origin_branch
   else
     branch=$default_branch
   fi
