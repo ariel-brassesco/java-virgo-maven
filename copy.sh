@@ -22,7 +22,7 @@ default_branch=$4
 name=`echo $clone_url | sed 's/^.*\///g' | sed 's/.git//g'`
 mkdir $name
 
-if [ $origin_branch == "" ]; then   
+if [ -z $origin_branch ]; then   
   git ls-remote --heads --tags $clone_url | grep -E 'refs/(heads|tags)/'$target_branch > /dev/null
   if [ $? -eq 0 ]; then
     download_url=`echo $clone_url | sed 's/\.git/\/archive\/'$target_branch'.zip/g'`
