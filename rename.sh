@@ -1,7 +1,8 @@
 #!/bin/bash
 clone_url=$1
-origin_branch=$2
-default_branch=$3
+target_branch=$2
+origin_branch=$3
+default_branch=$4
 
 #################################################################################################
 # 
@@ -12,16 +13,26 @@ default_branch=$3
 #  }
 #
 # It requires:
+#   - target_branch: main branch to test ($TRAVIS_BRANCH)
 #   - origin_branch: branch where the new code was written ($TRAVIS_PULL_REQUEST_BRANCH)
 #   - default_branch: branch to use as main branch in case $main_branch does not exist
 # 
 #################################################################################################
 
-git ls-remote --heads --tags $clone_url | grep -E 'refs/(heads|tags)/'$origin_branch > /dev/null
-if [ $? -eq 0 ]; then
-  sed -ie 's/\"@geppettoengine.*/\"@geppettoengine\/geppetto-client\": \"openworm\/geppetto-client#'${origin_branch}'\"/g' package.json
-  /bin/echo -e "\e[1;35m<$origin_branch> branch set for geppetto-client.\e[0m"
+if [ -z $origin_branch ]; then
+  git ls-remote --heads --tags $clone_url | grep -E 'refs/(heads|tags)/'$origin_branch > /dev/null
+  if [ $? -eq 0 ]; then
+    branch=$origin_branch
+  else
+    branch=$default_branch
+  fi
 else
-  sed -ie 's/\"@geppettoengine.*/\"@geppettoengine\/geppetto-client\": \"openworm\/geppetto-client#'${default_branch}'\"/g' package.json
-  /bin/echo -e "\e[1;35m<$default_branch> branch set for geppetto-client.\e[0m"
+  git ls-remote --heads --tags $clone_url | grep -E 'refs/(heads|tags)/'$target_branch > /dev/null
+  if [ $? -eq 0 ]; then
+    branch=$target_branch
+  else
+    branch=$default_branch
+  fi
 fi
+sed -ie 's/\"@geppettoengine.*/\"@geppettoengine\/geppetto-client\": \"openworm\/geppetto-client#'${branch}'\"/g' package.json
+/bin/echo -e "\e[1;35m<$branch> branch set for geppetto-client.\e[0m"
