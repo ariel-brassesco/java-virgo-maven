@@ -15,16 +15,20 @@ ENV PATH=$PATH:$MAVEN_HOME/bin \
   
 RUN useradd -ms /bin/bash developer
 
+COPY sources.list /etc/apt/sources.list
+RUN rm /etc/apt/sources.list.d/jessie-backports.list
+
 # install required packages
-RUN apt-get -qq update &&\
+RUN apt-get -o Acquire::Check-Valid-Until=false -qq update &&\
   apt-get -yq install --no-install-recommends \
     sudo \
     xvfb \
     curl \
     bsdtar \
+    net-tools \
     locate &&\
-  curl -s ${GITLFS_HTTP} | bash &&\
-  apt-get -yq install --no-install-recommends git-lfs &&\
+  curl -sL ${GITLFS_HTTP} | sed -E "s/apt-get update/apt-get -o Acquire::Check-Valid-Until=false update/g" | sudo -E bash - &&\
+  apt-get -o Acquire::Check-Valid-Until=false -yq install --no-install-recommends git-lfs &&\
   git lfs install &&\
   rm -rf /var/lib/apt/lists/*
 
