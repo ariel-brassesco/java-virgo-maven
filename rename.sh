@@ -34,5 +34,5 @@ else
     branch=$default_branch
   fi
 fi
-sed -ie 's/\"@geppettoengine.*/\"@geppettoengine\/geppetto-client\": \"openworm\/geppetto-client#'${branch}'\"/g' package.json
+sed -ie 's~"@geppettoengine/geppetto-client": ".*"~"@geppettoengine/geppetto-client": "openworm/geppetto-client#'${branch}'"~g' package.json
 /bin/echo -e "\e[1;35m<$branch> branch set for geppetto-client.\e[0m"
