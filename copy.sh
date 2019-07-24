@@ -19,16 +19,16 @@ default_branch=$4
 # 
 #################################################################################################
 
-name=`echo $clone_url | sed 's/^.*\///g' | sed 's/.git//g'`
+name=`echo $clone_url | sed 's~^.*/~~g' | sed 's~.git~~g'`
 mkdir $name
 
 if [ -z $origin_branch ]; then   
   git ls-remote --heads --tags $clone_url | grep -E 'refs/(heads|tags)/'$target_branch > /dev/null
   if [ $? -eq 0 ]; then
-    download_url=`echo $clone_url | sed 's/\.git/\/archive\/'$target_branch'.zip/g'`
+    download_url=`echo $clone_url | sed 's~.git~/archive/'$target_branch'.zip~g'`
     /bin/echo -e "\e[1;35mDownloading <$target_branch> branch for $name.\e[0m"
   else
-    download_url=`echo $clone_url | sed 's/\.git/\/archive\/'$default_branch'.zip/g'`
+    download_url=`echo $clone_url | sed 's~.git~/archive/'$default_branch'.zip~g'`
     /bin/echo -e "\e[1;35mDownloading <$default_branch> branch for $name.\e[0m"
   fi
   curl -sL $download_url | bsdtar -xzf - -C $name --strip-components 1
