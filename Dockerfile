@@ -65,7 +65,8 @@ ENV \
   NEUROML=https://github.com/openworm/org.geppetto.model.neuroml.git \
   SIM=https://github.com/openworm/org.geppetto.simulation.git \
   FRONTEND=https://github.com/openworm/org.geppetto.frontend.git \
-  APP=https://github.com/openworm/geppetto-application.git
+  APP=https://github.com/openworm/geppetto-application.git \
+  CLIENT=https://github.com/openworm/geppetto-client.git
 
 RUN mkdir /tmp/delete
 WORKDIR /tmp/delete
@@ -77,7 +78,9 @@ RUN \
   done &&\
   cd org.geppetto.frontend/src/main &&\
   git clone -b ${VERSION} ${APP} webapp &&\
-  cd ../../../org.geppetto &&\
+  cd webapp &&\
+  git clone -b ${VERSION} ${CLIENT} &&\
+  cd ../../../../org.geppetto &&\
   mvn -Dhttps.protocols=TLSv1.2 -Dmaven.test.skip install &&\
   cd ${HOME} &&\
   rm -rf /tmp/delete
