@@ -55,36 +55,4 @@ COPY --chown=1000:1000 copy.sh $HOME
 COPY --chown=1000:1000 rename.sh $HOME
 RUN chmod u+x $SERVER_HOME/bin/*.sh
 
-
-# Pre download Maven packages to speed up Geppetto builds
-ENV \
-  VERSION=development \
-  GEPPETTO=https://github.com/openworm/org.geppetto.git \
-  MODEL=https://github.com/openworm/org.geppetto.model.git \
-  CORE=https://github.com/openworm/org.geppetto.core.git \
-  NEUROML=https://github.com/openworm/org.geppetto.model.neuroml.git \
-  SIM=https://github.com/openworm/org.geppetto.simulation.git \
-  FRONTEND=https://github.com/openworm/org.geppetto.frontend.git \
-  APP=https://github.com/openworm/geppetto-application.git \
-  CLIENT=https://github.com/openworm/geppetto-client.git
-
-RUN mkdir /tmp/delete
-WORKDIR /tmp/delete
-
-RUN \
-  for i in ${GEPPETTO} ${MODEL} ${CORE} ${NEUROML} ${SIM} ${FRONTEND} ;\
-  do \
-    git clone -b ${VERSION} $i ;\
-  done &&\
-  cd org.geppetto.frontend/src/main &&\
-  git clone -b ${VERSION} ${APP} webapp &&\
-  cd webapp &&\
-  git clone -b ${VERSION} ${CLIENT} &&\
-  cd ../../../../org.geppetto &&\
-  mvn -Dhttps.protocols=TLSv1.2 -Dmaven.test.skip install &&\
-  cd ${HOME} &&\
-  rm -rf /tmp/delete
-
-WORKDIR $HOME
-
 CMD [ "/bin/bash" ]
